@@ -3,5 +3,19 @@
 {% block title %}For contact us{% endblock %}
 
 {% block body %}
+    <h2>Nous contacter</h2>
+    <p class="mt-5">
+        Veuillez remplir les champs ci-dessous pour toutes éventuelles questions. <br>
+        Nous y répondrons avec grand plaisir 😊
+    </p>
 
+    <div class="col-6 mx-auto mt-5">
+        {{ form_start(form)}}
+            {{ form_row(form.Nom) }}
+            {{ form_row(form.Email) }}
+            {{ form_row(form.Message) }}
+
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+        {{ form_end(form)}}
+    </div>
 {% endblock %}

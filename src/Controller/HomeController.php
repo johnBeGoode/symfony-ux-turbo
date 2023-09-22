@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
+use Symfony\UX\Turbo\TurboBundle;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
@@ -29,13 +29,21 @@ class HomeController extends AbstractController
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->addFlash('Success', 'Votre message a bien été envoyé !' );
-            return $this->redirectToRoute('app_home');
+            $this->addFlash('success', 'Votre message a bien été envoyé !' );
+
+            if (TurboBundle::STREAM_FORMAT === $request->getPreferredFormat()) {
+                // If the request comes from Turbo, set the content type as text/vnd.turbo-stream.html and only send the HTML to update
+                $request->setRequestFormat(TurboBundle::STREAM_FORMAT);
+                
+                return $this->render('partials/_notifications.html.twig');
+            }
         }
+
+        $response = new Response('', Response::HTTP_SEE_OTHER, []);
 
         return $this->render('home/contact.html.twig', [
             'form' => $form
-        ]);
+        ], $response);
     }
 
     #[Route('/about', name: 'app_about')]

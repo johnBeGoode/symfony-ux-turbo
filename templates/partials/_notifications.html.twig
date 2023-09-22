@@ -1,0 +1,11 @@
+{% block body %}
+    {% for message in app.flashes('success') %}
+        <turbo-stream action="replace" target="notification">
+            <template>
+                <div class="alert alert-success w-50 mx-auto text-center" id="notification" role="alert">
+                    {{ message }}
+                </div>
+            </template>
+        </turbo-stream>
+    {% endfor %}   
+{% endblock %}
